@@ -4,13 +4,16 @@ import pandas as pd
 
 from blessings import Terminal
 
+
 def move_down(n):
     for i in range(n):
         print(t.move_down)
 
+
 def print_category_list():
     for i in range(len(params['categories'])):
         print(t.bold(str(i)) + '\t' + params['categories'][i])
+
 
 def get_category_choice():
     user_input = input('Enter category: ')
@@ -21,9 +24,13 @@ def get_category_choice():
     elif user_input.isnumeric() and int(user_input) < len(params['categories']):
         return params['categories'][int(user_input)]
     else:
+        if not params['other_allowed']:
+            print('Invalid choice')
+            return get_category_choice()
         # New category name
         params['categories'].append(user_input)
         return user_input
+
 
 def save_output():
     df.to_csv('output.csv', index=False)
