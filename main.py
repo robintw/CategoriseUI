@@ -35,12 +35,22 @@ def get_category_choice():
 def save_output():
     df.to_csv('output.csv', index=False)
 
+def read_config(config_filename):
+    params = {}
+    exec(open(config_filename).read(), params)
+    del params['__builtins__']
 
-# Read config file
-params = {}
-exec(open(sys.argv[1]).read(), params)
-del params['__builtins__']
-print(params)
+    if type(params['categories']) is str:
+        # Read categories in from file
+        with open(params['categories']) as f:
+            cats = f.readlines()
+
+        cats = [cat.strip() for cat in cats]
+        params['categories'] = cats
+
+    return params
+
+params = read_config(sys.argv[1])
 
 cat_col = params['category_column']
 
@@ -70,4 +80,4 @@ for i, s in df.iterrows():
 
     print(t.clear)
 
-    save_output()
+save_output()
